@@ -1,0 +1,177 @@
+<header class="hero">
+  <div class="hero-inner">
+
+    <div class="hero-brand">
+      <div class="hero-logo">
+        <img src="logo-hapvida.png"
+             alt="Hapvida"
+             style="height:38px;width:auto;display:block">
+      </div>
+
+      <div class="hero-title">
+        <p style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em">
+          Comissão de Ética Médica · Hospital Paulo Sacramento
+        </p>
+      </div>
+    </div>
+
+    <nav class="tabs">
+      <button class="tab active" onclick="show('inicio')">
+        🏥 Início
+      </button>
+
+      <button class="tab" onclick="show('contato')">
+        📧 Fale Conosco
+      </button>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+<!-- INÍCIO -->
+<section id="inicio" class="page active">
+
+<div class="panel">
+
+<div class="panel-head">
+<div>
+<h2>Comissão de Ética Médica</h2>
+<p class="sub">
+Hospital Paulo Sacramento
+</p>
+</div>
+
+<span class="chip chip-blue">
+Gestão 2025-2027
+</span>
+
+</div>
+
+<div style="margin-top:20px">
+
+<p>
+Espaço destinado às informações institucionais da Comissão de Ética Médica.
+</p>
+
+<p>
+(Conteúdo será inserido posteriormente.)
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- FALE CONOSCO -->
+<section id="contato" class="page">
+
+<div class="panel">
+
+<div class="panel-head">
+
+<div>
+
+<h2>Fale Conosco</h2>
+
+<p class="sub">
+Envie dúvidas, sugestões ou comunicações à Comissão de Ética Médica.
+</p>
+
+</div>
+
+<span class="chip chip-teal">
+Contato confidencial
+</span>
+
+</div>
+
+
+
+<div class="meta">
+
+<div class="field">
+
+<label>Nome (opcional)</label>
+
+<input
+id="nome"
+type="text"
+placeholder="Seu nome">
+
+</div>
+
+
+<div class="field">
+
+<label>E-mail para retorno (opcional)</label>
+
+<input
+id="email"
+type="email"
+placeholder="seuemail@dominio.com">
+
+</div>
+
+</div>
+
+
+
+<div style="margin-top:20px">
+
+<div class="field">
+
+<label>Mensagem</label>
+
+<textarea
+id="mensagem"
+rows="10"
+placeholder="Digite aqui sua mensagem para a Comissão de Ética Médica..."
+style="
+width:100%;
+padding:14px;
+border-radius:16px;
+border:1px solid #d8dde7;
+font-family:inherit;
+resize:vertical;">
+</textarea>
+
+</div>
+
+</div>
+
+
+
+<div style="margin-top:20px">
+
+<label style="display:flex;gap:10px;align-items:center">
+
+<input type="checkbox" id="anonimo">
+
+Desejo permanecer anônimo
+
+</label>
+
+</div>
+
+
+
+<div style="margin-top:30px">
+
+<button class="btn btn-primary" onclick="enviarEmail()">
+
+📨 Enviar mensagem
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
