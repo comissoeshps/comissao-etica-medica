@@ -47,6 +47,12 @@ button.secondary:hover{background:var(--soft)}
 .info-chip b{color:var(--navy)}
 .empty-info{padding:48px 24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}
 .empty-info b{color:var(--ink)}
+.status-msg{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;display:none}
+.status-msg.ok{display:block;background:#E8F7EF;color:var(--green);border:1px solid #BFE6CC}
+.status-msg.err{display:block;background:#FDEEEE;color:var(--red);border:1px solid #F3C7C5}
+.status-msg.loading{display:block;background:var(--soft);color:var(--muted);border:1px solid var(--line)}
+.sync-status{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.5}
+.sync-status b{font-weight:800}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#b0bccc;border-radius:3px}
 @media(max-width:680px){.contato-info{flex-direction:column}}
 </style>
@@ -116,7 +122,7 @@ button.secondary:hover{background:var(--soft)}
 
     <div class="field">
       <label>E-mail (opcional)</label>
-      <input id="ctEmail" type="email" placeholder="seuemail@gmail.com">
+      <input id="ctEmail" type="email" placeholder="seuemail@exemplo.com">
     </div>
 
     <div class="field">
@@ -125,9 +131,13 @@ button.secondary:hover{background:var(--soft)}
     </div>
 
     <div class="actions">
-      <button class="primary" onclick="enviarMensagem()">Enviar mensagem</button>
+      <button class="primary" id="btnEnviar" onclick="enviarMensagem()">Enviar mensagem</button>
       <button class="secondary" onclick="limparFormulario()">Limpar</button>
     </div>
+
+    <div id="ctStatus" class="status-msg"></div>
+
+    <div id="syncStatus" class="sync-status"></div>
   </div>
 </section>
 
@@ -135,9 +145,9 @@ button.secondary:hover{background:var(--soft)}
 
 <script>
 /* ═══════════════════════════════════════════════ CONFIGURAÇÃO */
-// E-mail de destino da Comissão de Ética Médica.
-// Substitua pelo endereço institucional correto.
-const EMAIL_COMISSAO = 't_gabriel.macorm@hapvida.com.br';
+// Cole aqui a URL do Web App publicado no Google Apps Script
+// (veja instruções no comentário ao final deste arquivo).
+const SHEETS_WEBAPP_URL = 'COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT';
 
 /* ═══════════════════════════════════════════════ NAVEGAÇÃO ENTRE ABAS */
 function show(page){
@@ -152,24 +162,63 @@ function enviarMensagem(){
   const nome = document.getElementById('ctNome').value.trim();
   const email = document.getElementById('ctEmail').value.trim();
   const mensagem = document.getElementById('ctMensagem').value.trim();
+  const statusEl = document.getElementById('ctStatus');
+  const btn = document.getElementById('btnEnviar');
 
   if(!mensagem){
-    alert('Por favor, escreva sua mensagem antes de enviar.');
+    setStatus('err','Por favor, escreva sua mensagem antes de enviar.');
     return;
   }
 
-  const assunto = 'Mensagem - Fale Conosco (Comissão de Ética Médica)';
-  let corpo = '';
-  if(nome) corpo += 'Nome: ' + nome + '\n';
-  if(email) corpo += 'E-mail para contato: ' + email + '\n';
-  if(nome || email) corpo += '\n';
-  corpo += mensagem;
+  if(!SHEETS_WEBAPP_URL || SHEETS_WEBAPP_URL === 'https://script.google.com/macros/s/AKfycbxQQLKKO3opQAUYhUFxk_Gs9JCYRdig9x7PixyMOCqwwoieLOBSzf21cEvmHhTWcouqmg/exec'){
+    setStatus('err','Envio não configurado. Configure a URL do Google Sheets (SHEETS_WEBAPP_URL) no código.');
+    return;
+  }
 
-  const link = 'mailto:' + EMAIL_COMISSAO
-    + '?subject=' + encodeURIComponent(assunto)
-    + '&body=' + encodeURIComponent(corpo);
+  const registro = {
+    data_hora: new Date().toLocaleString('pt-BR'),
+    nome: nome || '(não informado)',
+    email: email || '(não informado)',
+    mensagem: mensagem
+  };
 
-  window.location.href = link;
+  btn.disabled = true;
+  setStatus('loading','Enviando mensagem...');
+
+  fetch(SHEETS_WEBAPP_URL,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(registro)
+  })
+  .then(res=>res.text())
+  .then(text=>{
+    let ok=false;
+    try{
+      const parsed = JSON.parse(text);
+      ok = parsed.status === 'ok';
+    }catch(e){
+      console.warn('Resposta não é JSON válido:', text);
+    }
+    if(ok){
+      setStatus('ok','✅ Mensagem enviada com sucesso! A Comissão de Ética Médica irá analisá-la.');
+      limparFormulario();
+    }else{
+      setStatus('err','⚠️ Não foi possível confirmar o envio. Verifique a configuração do Google Sheets.');
+    }
+  })
+  .catch(err=>{
+    console.error('Erro ao enviar:', err);
+    setStatus('err','❌ Erro ao enviar a mensagem. Verifique sua conexão e tente novamente.');
+  })
+  .finally(()=>{
+    btn.disabled = false;
+  });
+}
+
+function setStatus(tipo, texto){
+  const el = document.getElementById('ctStatus');
+  el.className = 'status-msg ' + tipo;
+  el.textContent = texto;
 }
 
 function limparFormulario(){
@@ -177,6 +226,66 @@ function limparFormulario(){
   document.getElementById('ctEmail').value = '';
   document.getElementById('ctMensagem').value = '';
 }
+
+/* ═══════════════════════════════════════════════ STATUS DE CONEXÃO */
+function updateSyncStatus(){
+  const el = document.getElementById('syncStatus');
+  if(!el) return;
+  if(!SHEETS_WEBAPP_URL || SHEETS_WEBAPP_URL === 'COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT'){
+    el.innerHTML = '⚠️ <b style="color:var(--amber)">Envio ao Google Sheets não configurado.</b> Configure a URL do Apps Script no código (constante SHEETS_WEBAPP_URL).';
+  }else{
+    el.innerHTML = '✅ <b style="color:var(--green)">Conectado ao Google Sheets.</b> As mensagens enviadas serão registradas automaticamente na planilha da Comissão.';
+  }
+}
+updateSyncStatus();
 </script>
+
+<!--
+═══════════════════════════════════════════════════════════════════════
+COMO CONFIGURAR O ENVIO PARA O GOOGLE SHEETS (passo a passo)
+═══════════════════════════════════════════════════════════════════════
+
+1) Crie uma planilha no Google Sheets, por exemplo "Fale Conosco - Comissão
+   de Ética Médica", com as colunas (na primeira linha):
+       data_hora | nome | email | mensagem
+
+2) No menu da planilha, vá em Extensões > Apps Script.
+
+3) Apague o conteúdo padrão e cole o código abaixo:
+
+   function doPost(e) {
+     try {
+       var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+       var dados = JSON.parse(e.postData.contents);
+       sheet.appendRow([
+         dados.data_hora,
+         dados.nome,
+         dados.email,
+         dados.mensagem
+       ]);
+       return ContentService
+         .createTextOutput(JSON.stringify({status:'ok'}))
+         .setMimeType(ContentService.MimeType.JSON);
+     } catch (err) {
+       return ContentService
+         .createTextOutput(JSON.stringify({status:'erro', mensagem: err.message}))
+         .setMimeType(ContentService.MimeType.JSON);
+     }
+   }
+
+4) Clique em "Implantar" > "Nova implantação".
+   - Tipo: "App da Web" (Web app)
+   - Executar como: "Eu" (sua conta)
+   - Quem pode acessar: "Qualquer pessoa"
+
+5) Copie a URL gerada (algo como
+   https://script.google.com/macros/s/XXXXXXXX/exec) e cole no lugar de
+   'COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT' na constante SHEETS_WEBAPP_URL,
+   no início do <script> deste arquivo.
+
+6) Salve o arquivo. A partir daí, toda mensagem enviada pela aba
+   "Fale Conosco" será registrada automaticamente nessa planilha.
+═══════════════════════════════════════════════════════════════════════
+-->
 </body>
 </html>
