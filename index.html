@@ -3,24 +3,39 @@
 
     <div class="hero-brand">
       <div class="hero-logo">
-        <img src="logo-hapvida.png"
-             alt="Hapvida"
-             style="height:38px;width:auto;display:block">
+        <img
+          src="logo-hapvida.png"
+          alt="Hapvida"
+          style="height:38px;width:auto;display:block"
+        >
       </div>
 
       <div class="hero-title">
-        <p style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em">
+        <p
+          style="
+            font-size:12px;
+            color:var(--muted);
+            font-weight:600;
+            letter-spacing:.02em;
+          "
+        >
           Comissão de Ética Médica · Hospital Paulo Sacramento
         </p>
       </div>
     </div>
 
     <nav class="tabs">
-      <button class="tab active" onclick="show('inicio')">
+      <button
+        class="tab active"
+        onclick="showPage('inicio')"
+      >
         🏥 Início
       </button>
 
-      <button class="tab" onclick="show('contato')">
+      <button
+        class="tab"
+        onclick="showPage('contato')"
+      >
         📧 Fale Conosco
       </button>
     </nav>
@@ -28,150 +43,173 @@
   </div>
 </header>
 
+
 <main>
 
-<!-- INÍCIO -->
-<section id="inicio" class="page active">
+  <!-- INÍCIO -->
+  <section
+    id="inicio"
+    class="page active"
+  >
 
-<div class="panel">
+    <div class="panel">
 
-<div class="panel-head">
-<div>
-<h2>Comissão de Ética Médica</h2>
-<p class="sub">
-Hospital Paulo Sacramento
-</p>
-</div>
+      <div class="panel-head">
 
-<span class="chip chip-blue">
-Gestão 2025-2027
-</span>
+        <div>
+          <h2>Comissão de Ética Médica</h2>
 
-</div>
+          <p class="sub">
+            Hospital Paulo Sacramento
+          </p>
+        </div>
 
-<div style="margin-top:20px">
+        <span class="chip chip-blue">
+          Gestão 2025–2027
+        </span>
 
-<p>
-Espaço destinado às informações institucionais da Comissão de Ética Médica.
-</p>
+      </div>
 
-<p>
-(Conteúdo será inserido posteriormente.)
-</p>
+      <div style="margin-top:24px">
 
-</div>
+        <p>
+          Espaço destinado às informações institucionais da Comissão de Ética Médica.
+        </p>
 
-</div>
+        <p>
+          O conteúdo desta página será disponibilizado em breve.
+        </p>
 
-</section>
+      </div>
 
+    </div>
 
-
-<!-- FALE CONOSCO -->
-<section id="contato" class="page">
-
-<div class="panel">
-
-<div class="panel-head">
-
-<div>
-
-<h2>Fale Conosco</h2>
-
-<p class="sub">
-Envie dúvidas, sugestões ou comunicações à Comissão de Ética Médica.
-</p>
-
-</div>
-
-<span class="chip chip-teal">
-Contato confidencial
-</span>
-
-</div>
+  </section>
 
 
+  <!-- FALE CONOSCO -->
+  <section
+    id="contato"
+    class="page"
+  >
 
-<div class="meta">
+    <div class="panel">
 
-<div class="field">
+      <div class="panel-head">
 
-<label>Nome (opcional)</label>
+        <div>
 
-<input
-id="nome"
-type="text"
-placeholder="Seu nome">
+          <h2>Fale Conosco</h2>
 
-</div>
+          <p class="sub">
+            Utilize este formulário para dúvidas, sugestões ou comunicações destinadas à Comissão de Ética Médica.
+          </p>
 
+        </div>
 
-<div class="field">
+        <span class="chip chip-teal">
+          Contato confidencial
+        </span>
 
-<label>E-mail para retorno (opcional)</label>
-
-<input
-id="email"
-type="email"
-placeholder="seuemail@dominio.com">
-
-</div>
-
-</div>
+      </div>
 
 
+      <div class="meta">
 
-<div style="margin-top:20px">
+        <div class="field">
 
-<div class="field">
+          <label>
+            Nome (opcional)
+          </label>
 
-<label>Mensagem</label>
+          <input
+            type="text"
+            id="nome"
+            placeholder="Seu nome"
+          >
 
-<textarea
-id="mensagem"
-rows="10"
-placeholder="Digite aqui sua mensagem para a Comissão de Ética Médica..."
-style="
-width:100%;
-padding:14px;
-border-radius:16px;
-border:1px solid #d8dde7;
-font-family:inherit;
-resize:vertical;">
-</textarea>
-
-</div>
-
-</div>
+        </div>
 
 
+        <div class="field">
 
-<div style="margin-top:20px">
+          <label>
+            E-mail para retorno (opcional)
+          </label>
 
-<label style="display:flex;gap:10px;align-items:center">
+          <input
+            type="email"
+            id="email"
+            placeholder="seuemail@dominio.com"
+          >
 
-<input type="checkbox" id="anonimo">
+        </div>
 
-Desejo permanecer anônimo
-
-</label>
-
-</div>
+      </div>
 
 
+      <div style="margin-top:20px">
 
-<div style="margin-top:30px">
+        <div class="field">
 
-<button class="btn btn-primary" onclick="enviarEmail()">
+          <label>
+            Mensagem
+          </label>
 
-📨 Enviar mensagem
+          <textarea
+            id="mensagem"
+            rows="8"
+            placeholder="Digite aqui sua mensagem para a Comissão de Ética Médica..."
+            style="
+              width:100%;
+              padding:14px;
+              border:1px solid #d8dde7;
+              border-radius:16px;
+              resize:vertical;
+              font-family:inherit;
+            "
+          ></textarea>
 
-</button>
+        </div>
 
-</div>
+      </div>
 
-</div>
 
-</section>
+      <div style="margin-top:20px">
+
+        <label
+          style="
+            display:flex;
+            gap:10px;
+            align-items:center;
+          "
+        >
+
+          <input
+            type="checkbox"
+            id="anonimo"
+          >
+
+          Desejo permanecer anônimo
+
+        </label>
+
+      </div>
+
+
+      <div style="margin-top:32px">
+
+        <button
+          class="btn btn-primary"
+          onclick="enviarEmail()"
+        >
+          📨 Enviar mensagem
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
 
 </main>
