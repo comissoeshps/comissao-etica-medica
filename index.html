@@ -55,6 +55,31 @@ button.secondary:hover{background:var(--soft)}
 .status-msg.loading{display:block;background:var(--soft);color:var(--muted);border:1px solid var(--line)}
 .sync-status{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.5}
 .sync-status b{font-weight:800}
+.inst-intro{font-size:13.5px;color:var(--ink);line-height:1.65;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.inst-section{margin-bottom:22px}
+.inst-section h3{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.inst-section h3::after{content:"";flex:1;height:1px;background:var(--line)}
+.inst-section p{font-size:13px;color:var(--ink);line-height:1.65;margin-bottom:8px}
+.inst-list{list-style:none;padding:0;margin:0 0 8px}
+.inst-list li{font-size:13px;color:var(--ink);line-height:1.6;padding:5px 0 5px 18px;position:relative;border-bottom:1px solid #f0f3f8}
+.inst-list li:last-child{border-bottom:none}
+.inst-list li::before{content:"›";position:absolute;left:0;color:var(--blue);font-weight:900}
+.inst-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:8px}
+.inst-table th{background:var(--navy);color:#fff;padding:9px 12px;text-align:left;font-weight:800;font-size:11.5px;letter-spacing:.04em}
+.inst-table td{padding:9px 12px;vertical-align:top;border-bottom:1px solid var(--line);line-height:1.5}
+.inst-table tr:last-child td{border-bottom:none}
+.inst-table tr:nth-child(even) td{background:var(--soft)}
+.inst-flow{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.inst-flow-step{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:var(--soft);border-radius:10px;border-left:3px solid var(--blue)}
+.inst-flow-step .step-n{font-size:15px;font-weight:900;color:var(--blue);min-width:20px}
+.inst-flow-step p{font-size:13px;color:var(--ink);line-height:1.55;margin:0}
+.inst-alert{background:#FFF8E6;border:1px solid #F5D87A;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#7A5A00;line-height:1.55;margin:10px 0}
+.inst-guarantee{display:flex;flex-direction:column;gap:8px}
+.inst-guarantee-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--soft);border-radius:10px}
+.inst-guarantee-item .gi-icon{font-size:16px;min-width:22px}
+.inst-guarantee-item p{font-size:13px;color:var(--ink);line-height:1.55;margin:0}
+.inst-footer{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);text-align:right}
+@media(max-width:760px){.inst-table{font-size:11.5px}.inst-table th,.inst-table td{padding:7px 8px}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#b0bccc;border-radius:3px}
 @media(max-width:680px){.contato-info{flex-direction:column}}
 @media(max-width:760px){
@@ -99,26 +124,131 @@ button.secondary:hover{background:var(--soft)}
   <div class="panel">
     <div class="panel-head">
       <div>
-        <h2>Comissão de Ética Médica</h2>
-        <p class="sub">Informações institucionais sobre a Comissão de Ética Médica do Hospital Paulo Sacramento.</p>
+        <h2>Comitê de Ética Médica — CEM/HPS</h2>
+        <p class="sub">Orientações ao corpo clínico sobre estrutura, funcionamento e canais de acionamento do CEM/HPS.</p>
       </div>
     </div>
 
-    <!--
-      ════════════════════════════════════════════════════════════════
-      ÁREA DE CONTEÚDO — A PREENCHER
+    <div class="inst-intro">
+      O <strong>Comitê de Ética Médica (CEM/HPS)</strong> é órgão de natureza <strong>educativa, orientadora e fiscalizadora</strong>, com atuação fundamentada no <em>Código de Ética Médica</em> e na <em>Resolução CFM nº 2.152/2016</em> (e atualizações). Atua como elo entre o corpo clínico, a Diretoria Técnica e o <strong>Conselho Regional de Medicina do Estado de São Paulo (CRM-SP)</strong>.
+    </div>
 
-      Substitua o bloco abaixo pelas informações reais da Comissão:
-      finalidade, composição, atribuições, normas (Código de Ética
-      Médica, CFM, etc.), forma de funcionamento, contatos, horários
-      de reunião, fluxo de denúncias/consultas, e demais informações
-      institucionais.
-      ════════════════════════════════════════════════════════════════
-    -->
-    <div class="empty-info">
-      <b>Conteúdo em preparação.</b><br>
-      As informações sobre finalidade, composição, atribuições e
-      funcionamento da Comissão de Ética Médica serão inseridas aqui.
+    <!-- 1. MEMBROS -->
+    <div class="inst-section">
+      <h3>1. Membros da Comissão</h3>
+      <div class="inst-guarantee">
+        <div class="inst-guarantee-item">
+          <span class="gi-icon">👤</span>
+          <p><strong>Presidente:</strong> Gabriel Cruvinel Macor</p>
+        </div>
+        <div class="inst-guarantee-item">
+          <span class="gi-icon">👤</span>
+          <p><strong>Vice-presidente:</strong> Juliano Cesar Alves Reis</p>
+        </div>
+        <div class="inst-guarantee-item">
+          <span class="gi-icon">👤</span>
+          <p><strong>Membro efetivo:</strong> Yuri Semeghini Moreira</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. QUANDO ACIONAR -->
+    <div class="inst-section">
+      <h3>2. Quando acionar o Comitê</h3>
+      <p>O CEM/HPS deve ser acionado, formalmente, sempre que houver dúvida, conflito ou situação relevante envolvendo conduta ética médica, em especial nas seguintes hipóteses:</p>
+      <ul class="inst-list">
+        <li>Dúvidas sobre o cumprimento de dispositivos do Código de Ética Médica em situações concretas da assistência.</li>
+        <li>Conflitos éticos entre médicos, entre especialidades ou entre o corpo clínico e demais profissionais de saúde.</li>
+        <li>Questões relativas a sigilo médico, prontuário do paciente, atestados, declarações e termos de responsabilidade.</li>
+        <li>Dilemas envolvendo autonomia do paciente, recusa de tratamento, terminalidade e cuidados paliativos.</li>
+        <li>Aplicação do Termo de Consentimento Livre e Esclarecido em procedimentos de maior complexidade ou risco.</li>
+        <li>Casos de objeção de consciência do médico assistente.</li>
+        <li>Suspeita de infração ética identificada em auditoria interna, análise de prontuário ou notificação de evento adverso.</li>
+        <li>Situações de comunicação de más notícias, decisões compartilhadas e conflitos com familiares.</li>
+        <li>Demandas externas envolvendo o corpo clínico (judiciais, ouvidoria, mídia) cujo enfrentamento exija manifestação ética institucional.</li>
+        <li>Pedidos de parecer formal pela Diretoria Técnica, Comissão de Revisão de Prontuários, NSP, SCIH ou demais comitês.</li>
+      </ul>
+      <div class="inst-alert">
+        ⚠️ <strong>Importante:</strong> o CEM não substitui o CRM-SP no exercício do poder disciplinar, tampouco a Comissão de Revisão de Prontuários na análise técnica do registro assistencial. Sua função é orientar, qualificar a conduta e, quando cabível, encaminhar formalmente os casos.
+      </div>
+    </div>
+
+    <!-- 3. COMO ACIONAR -->
+    <div class="inst-section">
+      <h3>3. Como acionar — canais e prazos</h3>
+      <p>A formalização do acionamento garante rastreabilidade, sigilo e tempestividade da resposta. Os canais oficiais são:</p>
+      <table class="inst-table">
+        <thead>
+          <tr>
+            <th>Canal</th>
+            <th>Finalidade</th>
+            <th>Prazo de retorno</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>E-mail / site institucional do CEM</strong></td>
+            <td>Consultas éticas, denúncias e solicitações de parecer formal. Canal preferencial para registro documental.</td>
+            <td>Até 7 dias úteis (consulta) / 15 dias úteis (parecer)</td>
+          </tr>
+          <tr>
+            <td><strong>Formulário interno de notificação</strong></td>
+            <td>Notificação de eventos éticos identificados em rotina assistencial, com possibilidade de sigilo da fonte.</td>
+            <td>Triagem em até 5 dias úteis</td>
+          </tr>
+          <tr>
+            <td><strong>Reuniões ordinárias do CEM</strong></td>
+            <td>Discussão de casos previamente pautados, deliberações colegiadas e elaboração de pareceres.</td>
+            <td>Mensal (calendário divulgado)</td>
+          </tr>
+          <tr>
+            <td><strong>Acionamento de urgência</strong></td>
+            <td>Situações com risco iminente à conduta ética ou ao paciente que demandem manifestação tempestiva.</td>
+            <td>Reunião extraordinária em até 48h</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Todas as comunicações devem conter: identificação do solicitante (preservada quando aplicável), descrição objetiva da situação, data e local da ocorrência, profissionais envolvidos (quando pertinente) e questionamento específico ao Comitê. Documentos comprobatórios podem ser anexados.</p>
+    </div>
+
+    <!-- 4. GARANTIAS -->
+    <div class="inst-section">
+      <h3>4. Garantias e princípios de funcionamento</h3>
+      <div class="inst-guarantee">
+        <div class="inst-guarantee-item">
+          <span class="gi-icon">🔒</span>
+          <p><strong>Sigilo absoluto</strong> sobre o conteúdo das consultas e sobre a identidade do consulente, salvo nas hipóteses de obrigatoriedade legal.</p>
+        </div>
+        <div class="inst-guarantee-item">
+          <span class="gi-icon">⚖️</span>
+          <p><strong>Imparcialidade</strong> na apreciação dos casos, com impedimento e suspeição aplicáveis a membros direta ou indiretamente envolvidos.</p>
+        </div>
+        <div class="inst-guarantee-item">
+          <span class="gi-icon">📘</span>
+          <p><strong>Caráter educativo e orientativo</strong> das manifestações do CEM, sem prejuízo do encaminhamento ao CRM-SP nas hipóteses cabíveis.</p>
+        </div>
+        <div class="inst-guarantee-item">
+          <span class="gi-icon">🏛️</span>
+          <p><strong>Independência</strong> em relação à Diretoria Técnica e à gestão hospitalar quanto ao mérito ético das deliberações.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. FLUXO -->
+    <div class="inst-section">
+      <h3>5. Fluxo resumido de atendimento</h3>
+      <div class="inst-flow">
+        <div class="inst-flow-step"><span class="step-n">1</span><p><strong>Recepção</strong> do acionamento por canal oficial e protocolização.</p></div>
+        <div class="inst-flow-step"><span class="step-n">2</span><p><strong>Triagem</strong> pelo coordenador do CEM, com classificação (consulta, denúncia, parecer ou caso urgente).</p></div>
+        <div class="inst-flow-step"><span class="step-n">3</span><p><strong>Designação de relator</strong> e, quando necessário, oitiva das partes envolvidas.</p></div>
+        <div class="inst-flow-step"><span class="step-n">4</span><p><strong>Deliberação colegiada</strong> em reunião ordinária ou extraordinária.</p></div>
+        <div class="inst-flow-step"><span class="step-n">5</span><p><strong>Emissão de parecer</strong> técnico-ético, com retorno formal ao solicitante.</p></div>
+        <div class="inst-flow-step"><span class="step-n">6</span><p><strong>Encaminhamento institucional</strong> cabível (Diretoria Técnica, CRM-SP, demais comitês) e registro em sistema de gestão da qualidade.</p></div>
+      </div>
+    </div>
+
+    <div class="inst-footer">
+      Presidência do Comitê de Ética Médica – CEM/HPS &nbsp;·&nbsp; Comunicado COM-CEM-001/2026 &nbsp;·&nbsp; Fevereiro de 2026
     </div>
 
   </div>
