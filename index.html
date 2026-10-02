@@ -101,6 +101,45 @@ button.secondary:hover{background:var(--soft)}
   .info-chip{width:100%}
 }
 </style>
+<!-- Firebase (área restrita CEM) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+.cem-wrap{max-width:900px;margin:0 auto}
+.cem-login-card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:28px;max-width:400px;margin:24px auto}
+.cem-login-card h2{text-align:center}
+.cem-login-card .sub{text-align:center;margin:6px auto 18px}
+.cem-field{margin-bottom:14px}
+.cem-field label{display:block;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.cem-field input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none}
+.cem-field input:focus{border-color:var(--blue)}
+.cem-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px}
+.cem-btn:hover{background:#1558c0}
+.cem-btn:disabled{opacity:.6;cursor:default}
+.cem-err{color:var(--red);font-size:12.5px;text-align:center;margin-top:10px;min-height:16px}
+.cem-userbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:16px}
+.cem-userbar .u-name{font-weight:800;color:var(--navy)}
+.cem-badge{display:inline-block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:999px;margin-left:8px}
+.cem-badge.adm{background:#FDEEEE;color:var(--red);border:1px solid #F3C7C5}
+.cem-badge.mem{background:#EAF2FF;color:var(--blue);border:1px solid #BBD4FF}
+.cem-item{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
+.cem-item .i-meta{font-size:11.5px;color:var(--muted);margin-bottom:4px}
+.cem-item .i-msg{font-size:13.5px;color:var(--ink);white-space:pre-wrap;line-height:1.5;word-break:break-word}
+.cem-item .i-actions{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.cem-mini{font-size:12px;font-weight:700;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.cem-mini.del{background:#FDEEEE;color:var(--red)}
+.cem-mini.edit{background:#EAF2FF;color:var(--blue)}
+.cem-empty{color:var(--muted);font-size:13px;padding:18px;text-align:center}
+.cem-adminbox{background:var(--soft);border:1px dashed var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.cem-adminbox .row{display:flex;gap:8px;flex-wrap:wrap}
+.cem-adminbox input{flex:1;min-width:140px;border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'DM Sans',sans-serif}
+.cem-tabs2{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.cem-tab2{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;color:var(--navy);font-family:'DM Sans',sans-serif}
+.cem-tab2.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.cem-sub{display:none}.cem-sub.active{display:block}
+</style>
+
 </head>
 <body>
 <header class="hero">
@@ -115,6 +154,7 @@ button.secondary:hover{background:var(--soft)}
     <button class="tab active" onclick="show('inicio')">Início</button>
     <button class="tab" onclick="show('arquivos')">Arquivos</button>
     <button class="tab" onclick="show('contato')">Fale Conosco</button>
+    <button class="tab" onclick="show('restrito')">Área Restrita</button>
     <button class="tab" onclick="window.location.href='https://comissoeshps.github.io/comissao-prontuarios/'">Comissão de Revisão de Prontuários</button>
   </nav>
 </div>
@@ -337,6 +377,88 @@ button.secondary:hover{background:var(--soft)}
   </div>
 </section>
 
+
+<!-- ═══════════════════════════ PÁGINA: ÁREA RESTRITA ═══════════════════════════ -->
+<section id="page-restrito" class="page">
+  <div class="panel cem-wrap">
+
+    <!-- TELA: LOGIN -->
+    <div id="cemLogin">
+      <div class="cem-login-card">
+        <h2>Área Restrita — CEM/HPS</h2>
+        <p class="sub">Acesso aos membros da Comissão de Ética Médica.</p>
+        <div class="cem-field"><label>Usuário</label><input id="cemUser" type="text" autocomplete="username" placeholder="seu usuário" onkeydown="if(event.key==='Enter')cemDoLogin()"></div>
+        <div class="cem-field"><label>Senha</label><input id="cemPass" type="password" autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')cemDoLogin()"></div>
+        <button class="cem-btn" id="cemLoginBtn" onclick="cemDoLogin()">Entrar</button>
+        <div id="cemLoginErr" class="cem-err"></div>
+      </div>
+    </div>
+
+    <!-- TELA: DEFINIR SENHA (1º acesso) -->
+    <div id="cemSetPw" style="display:none">
+      <div class="cem-login-card">
+        <h2>Defina sua senha</h2>
+        <p class="sub">Primeiro acesso: escolha uma senha pessoal (mínimo de 8 caracteres).</p>
+        <div class="cem-field"><label>Nova senha</label><input id="cemNewPw1" type="password" autocomplete="new-password" placeholder="Nova senha"></div>
+        <div class="cem-field"><label>Confirmar senha</label><input id="cemNewPw2" type="password" autocomplete="new-password" placeholder="Repita a senha"></div>
+        <button class="cem-btn" onclick="cemSavePw()">Salvar senha</button>
+        <div id="cemSetPwErr" class="cem-err"></div>
+      </div>
+    </div>
+
+    <!-- TELA: CONTEÚDO (logado) -->
+    <div id="cemApp" style="display:none">
+      <div class="cem-userbar">
+        <div><span class="u-name" id="cemUName">—</span><span id="cemUBadge" class="cem-badge mem">Membro</span></div>
+        <button class="cem-mini" style="background:#fff;border:1.5px solid var(--line);color:var(--navy)" onclick="cemLogout()">Sair</button>
+      </div>
+
+      <div class="cem-tabs2">
+        <button class="cem-tab2 active" data-sub="queixas" onclick="cemSub('queixas',this)">Queixas</button>
+        <button class="cem-tab2" data-sub="arquivos" onclick="cemSub('arquivos',this)">Arquivos</button>
+        <button class="cem-tab2" data-sub="membros" onclick="cemSub('membros',this)">Membros</button>
+      </div>
+
+      <!-- QUEIXAS -->
+      <div id="cemSubQueixas" class="cem-sub active">
+        <div id="cemQueixas"><div class="cem-empty">Carregando…</div></div>
+      </div>
+
+      <!-- ARQUIVOS -->
+      <div id="cemSubArquivos" class="cem-sub">
+        <div id="cemArqAdmin" class="cem-adminbox" style="display:none">
+          <div style="font-weight:800;color:var(--navy);margin-bottom:8px;font-size:13px">Adicionar arquivo (link)</div>
+          <div class="row">
+            <input id="cemArqTitulo" placeholder="Título">
+            <input id="cemArqCat" placeholder="Categoria (ex.: Atas)">
+          </div>
+          <div class="row" style="margin-top:8px">
+            <input id="cemArqUrl" placeholder="Link (pasta/arquivo restrito no Drive)">
+            <button class="cem-btn" style="max-width:150px;margin-top:0" onclick="cemAddArq()">Adicionar</button>
+          </div>
+          <div id="cemArqErr" class="cem-err"></div>
+        </div>
+        <div id="cemArquivos"><div class="cem-empty">Carregando…</div></div>
+      </div>
+
+      <!-- MEMBROS -->
+      <div id="cemSubMembros" class="cem-sub">
+        <div id="cemMemAdmin" class="cem-adminbox" style="display:none">
+          <div style="font-weight:800;color:var(--navy);margin-bottom:8px;font-size:13px">Adicionar membro</div>
+          <div class="row">
+            <input id="cemMemNome" placeholder="Nome">
+            <input id="cemMemCargo" placeholder="Cargo (ex.: Membro efetivo)">
+            <button class="cem-btn" style="max-width:150px;margin-top:0" onclick="cemAddMem()">Adicionar</button>
+          </div>
+          <div id="cemMemErr" class="cem-err"></div>
+        </div>
+        <div id="cemMembros"><div class="cem-empty">Carregando…</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 </main>
 
 <script>
@@ -377,6 +499,9 @@ function enviarMensagem(){
     email: email || '(não informado)',
     mensagem: mensagem
   };
+
+  // Área restrita: grava a queixa também no Firebase (cem_queixas)
+  try{ if(window.cemPushQueixa) window.cemPushQueixa(registro); }catch(e){}
 
   btn.disabled = true;
   setStatus('loading','Enviando mensagem...');
@@ -490,5 +615,230 @@ TESTE: envie uma mensagem pela aba "Fale Conosco" e confirme que uma
 nova linha aparece na planilha, com os valores nas colunas certas.
 ═══════════════════════════════════════════════════════════════════════
 -->
+
+<script>
+/* ═══════════════ ÁREA RESTRITA — CEM/HPS (Firebase: projeto comissao-prontuarios, nós cem_*) ═══════════════ */
+(function(){
+  const FB_CONFIG_CEM = {
+    apiKey: "AIzaSyAarUtMarxCoHB3K_Wb8ZnF2S2oLri3Cf4",
+    authDomain: "comissao-prontuarios.firebaseapp.com",
+    databaseURL: "https://comissao-prontuarios-default-rtdb.firebaseio.com",
+    projectId: "comissao-prontuarios",
+    storageBucket: "comissao-prontuarios.firebasestorage.app",
+    messagingSenderId: "173375373355",
+    appId: "1:173375373355:web:8fe420e5a470c176d82a6e"
+  };
+  const DOMAIN='@comissaohps.local';
+  if(typeof firebase==='undefined'){ console.error('Firebase SDK não carregou'); return; }
+  if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG_CEM);
+  const auth=firebase.auth();
+  const db=firebase.database();
+  try{ auth.setPersistence(firebase.auth.Auth.Persistence.SESSION); }catch(e){}
+
+  let CUR=null, IS_ADMIN=false, idleTimer=null;
+  const $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function userFromEmail(email){return (email||'').replace(DOMAIN,'');}
+  function fmtData(ms){ if(!ms) return ''; try{return new Date(ms).toLocaleString('pt-BR');}catch(e){return '';} }
+
+  /* exposto para o formulário público "Fale Conosco" — grava a queixa também no Firebase */
+  window.cemPushQueixa=function(reg){
+    try{
+      db.ref('cem_queixas').push({
+        data_hora: String(reg.data_hora||'').slice(0,100),
+        nome: String(reg.nome||'').slice(0,200),
+        email: String(reg.email||'').slice(0,200),
+        mensagem: String(reg.mensagem||'').slice(0,5000),
+        criadoEm: Date.now()
+      });
+    }catch(e){ console.warn('cemPushQueixa falhou', e); }
+  };
+
+  function screen(which){
+    $('cemLogin').style.display  = which==='login' ?'block':'none';
+    $('cemSetPw').style.display  = which==='setpw' ?'block':'none';
+    $('cemApp').style.display    = which==='app'   ?'block':'none';
+  }
+
+  /* ---------- LOGIN ---------- */
+  window.cemDoLogin=function(){
+    const u=($('cemUser').value||'').trim().toLowerCase();
+    const p=$('cemPass').value||'';
+    const err=$('cemLoginErr'); err.textContent='';
+    if(!u||!p){ err.textContent='Informe usuário e senha.'; return; }
+    $('cemLoginBtn').disabled=true;
+    auth.signInWithEmailAndPassword(u+DOMAIN,p)
+      .catch(function(e){
+        let m='Usuário ou senha inválidos.';
+        if(e&&e.code==='auth/too-many-requests') m='Muitas tentativas. Aguarde alguns minutos e tente de novo.';
+        if(e&&e.code==='auth/network-request-failed') m='Falha de rede. Verifique sua conexão.';
+        err.textContent=m;
+      })
+      .finally(function(){ $('cemLoginBtn').disabled=false; });
+  };
+
+  window.cemLogout=function(){ auth.signOut(); };
+
+  /* ---------- PRIMEIRA SENHA ---------- */
+  window.cemSavePw=function(){
+    const a=$('cemNewPw1').value||'', b=$('cemNewPw2').value||'', err=$('cemSetPwErr');
+    err.textContent='';
+    if(a.length<8){ err.textContent='Mínimo de 8 caracteres.'; return; }
+    if(a!==b){ err.textContent='As senhas não conferem.'; return; }
+    const user=auth.currentUser; if(!user){ err.textContent='Sessão expirada — entre novamente.'; return; }
+    user.updatePassword(a)
+      .then(function(){ return db.ref('cem_perfis/'+userFromEmail(user.email)+'/pwSet').set(true); })
+      .then(function(){ enterApp(); })
+      .catch(function(e){ err.textContent='Não foi possível salvar. Saia e entre novamente.'; console.warn(e); });
+  };
+
+  /* ---------- ESTADO DE AUTENTICAÇÃO ---------- */
+  auth.onAuthStateChanged(function(user){
+    if(!user){ CUR=null; IS_ADMIN=false; detachAll(); screen('login'); return; }
+    const uname=userFromEmail(user.email);
+    Promise.all([
+      db.ref('cem_autorizados/'+uname).once('value'),
+      db.ref('cem_admins/'+uname).once('value'),
+      db.ref('cem_perfis/'+uname+'/pwSet').once('value')
+    ]).then(function(res){
+      const autorizado=res[0].val()===true;
+      IS_ADMIN=res[1].val()===true;
+      if(!autorizado && !IS_ADMIN){
+        screen('login');
+        $('cemLoginErr').textContent='Sua conta não tem acesso à área restrita do CEM.';
+        auth.signOut();
+        return;
+      }
+      CUR=uname;
+      if(res[2].val()!==true){ screen('setpw'); return; }
+      enterApp();
+    }).catch(function(e){
+      console.warn(e);
+      screen('login');
+      $('cemLoginErr').textContent='Erro ao verificar permissões.';
+      auth.signOut();
+    });
+  });
+
+  function enterApp(){
+    screen('app');
+    $('cemUName').textContent=CUR;
+    const b=$('cemUBadge');
+    b.textContent=IS_ADMIN?'Administrador':'Membro';
+    b.className='cem-badge '+(IS_ADMIN?'adm':'mem');
+    $('cemArqAdmin').style.display=IS_ADMIN?'block':'none';
+    $('cemMemAdmin').style.display=IS_ADMIN?'block':'none';
+    attachAll();
+    resetIdle();
+  }
+
+  /* ---------- SUB-ABAS ---------- */
+  window.cemSub=function(name,btn){
+    document.querySelectorAll('.cem-sub').forEach(function(s){s.classList.remove('active');});
+    document.querySelectorAll('.cem-tab2').forEach(function(t){t.classList.remove('active');});
+    const map={queixas:'cemSubQueixas',arquivos:'cemSubArquivos',membros:'cemSubMembros'};
+    $(map[name]).classList.add('active');
+    if(btn) btn.classList.add('active');
+  };
+
+  /* ---------- LISTENERS DE DADOS ---------- */
+  const refs={};
+  function attachAll(){
+    detachAll();
+    refs.q=db.ref('cem_queixas');  refs.q.on('value',renderQueixas,onDenied);
+    refs.a=db.ref('cem_arquivos'); refs.a.on('value',renderArquivos,onDenied);
+    refs.m=db.ref('cem_membros');  refs.m.on('value',renderMembros,onDenied);
+  }
+  function detachAll(){ Object.keys(refs).forEach(function(k){ try{refs[k].off();}catch(e){} }); }
+  function onDenied(e){ console.warn('leitura negada/erro', e); }
+  function toArr(snap){ const o=snap.val()||{}; return Object.keys(o).map(function(k){return Object.assign({_id:k},o[k]);}); }
+
+  /* QUEIXAS */
+  function renderQueixas(snap){
+    const arr=toArr(snap).sort(function(x,y){return (y.criadoEm||0)-(x.criadoEm||0);});
+    const el=$('cemQueixas');
+    if(!arr.length){ el.innerHTML='<div class="cem-empty">Nenhuma queixa registrada.</div>'; return; }
+    el.innerHTML=arr.map(function(q){
+      const hasEmail=q.email && q.email!=='(não informado)';
+      const meta=esc(q.data_hora||fmtData(q.criadoEm))+' · '+esc(q.nome||'(sem nome)')+(hasEmail?' · '+esc(q.email):'');
+      const del=IS_ADMIN?'<div class="i-actions"><button class="cem-mini del" onclick="cemDelQueixa(\''+esc(q._id)+'\')">Excluir</button></div>':'';
+      return '<div class="cem-item"><div class="i-meta">'+meta+'</div><div class="i-msg">'+esc(q.mensagem||'')+'</div>'+del+'</div>';
+    }).join('');
+  }
+  window.cemDelQueixa=function(id){ if(!IS_ADMIN) return; if(confirm('Excluir esta queixa? Esta ação não pode ser desfeita.')) db.ref('cem_queixas/'+id).remove(); };
+
+  /* ARQUIVOS */
+  function renderArquivos(snap){
+    const arr=toArr(snap).sort(function(x,y){return (y.criadoEm||0)-(x.criadoEm||0);});
+    const el=$('cemArquivos');
+    if(!arr.length){ el.innerHTML='<div class="cem-empty">Nenhum arquivo cadastrado.</div>'; return; }
+    el.innerHTML=arr.map(function(a){
+      const okUrl=/^https?:\/\//i.test(a.url||'');
+      const titulo=esc(a.titulo||'(sem título)');
+      const link=okUrl?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;text-decoration:none">'+titulo+' ↗</a>':titulo;
+      const cat=a.categoria?'<div class="i-meta">'+esc(a.categoria)+'</div>':'';
+      const act=IS_ADMIN?'<div class="i-actions"><button class="cem-mini edit" onclick="cemEditArq(\''+esc(a._id)+'\')">Editar</button><button class="cem-mini del" onclick="cemDelArq(\''+esc(a._id)+'\')">Excluir</button></div>':'';
+      return '<div class="cem-item">'+cat+'<div style="font-size:14px">'+link+'</div>'+act+'</div>';
+    }).join('');
+  }
+  window.cemAddArq=function(){
+    if(!IS_ADMIN) return;
+    const t=($('cemArqTitulo').value||'').trim(), c=($('cemArqCat').value||'').trim(), u=($('cemArqUrl').value||'').trim();
+    const err=$('cemArqErr'); err.textContent='';
+    if(!t){ err.textContent='Informe o título.'; return; }
+    if(!/^https?:\/\//i.test(u)){ err.textContent='Informe um link válido (começando com http/https).'; return; }
+    db.ref('cem_arquivos').push({titulo:t.slice(0,300),categoria:c.slice(0,100),url:u.slice(0,2000),criadoEm:Date.now()})
+      .then(function(){ $('cemArqTitulo').value='';$('cemArqCat').value='';$('cemArqUrl').value=''; })
+      .catch(function(e){ err.textContent='Falha ao salvar.'; console.warn(e); });
+  };
+  window.cemEditArq=function(id){
+    if(!IS_ADMIN) return;
+    db.ref('cem_arquivos/'+id).once('value').then(function(s){
+      const a=s.val()||{};
+      const t=prompt('Título:',a.titulo||''); if(t===null) return;
+      const c=prompt('Categoria:',a.categoria||''); if(c===null) return;
+      const u=prompt('Link (http/https):',a.url||''); if(u===null) return;
+      if(!/^https?:\/\//i.test(u)){ alert('Link inválido.'); return; }
+      db.ref('cem_arquivos/'+id).set({titulo:(t||'').slice(0,300),categoria:(c||'').slice(0,100),url:(u||'').slice(0,2000),criadoEm:a.criadoEm||Date.now()});
+    });
+  };
+  window.cemDelArq=function(id){ if(!IS_ADMIN) return; if(confirm('Excluir este arquivo?')) db.ref('cem_arquivos/'+id).remove(); };
+
+  /* MEMBROS */
+  function renderMembros(snap){
+    const arr=toArr(snap).sort(function(x,y){return (x.ordem||0)-(y.ordem||0);});
+    const el=$('cemMembros');
+    if(!arr.length){ el.innerHTML='<div class="cem-empty">Nenhum membro cadastrado.</div>'; return; }
+    el.innerHTML=arr.map(function(m){
+      const act=IS_ADMIN?'<div class="i-actions"><button class="cem-mini edit" onclick="cemEditMem(\''+esc(m._id)+'\')">Editar</button><button class="cem-mini del" onclick="cemDelMem(\''+esc(m._id)+'\')">Excluir</button></div>':'';
+      return '<div class="cem-item"><div style="font-weight:700;color:var(--navy)">'+esc(m.nome||'')+'</div><div class="i-meta">'+esc(m.cargo||'')+'</div>'+act+'</div>';
+    }).join('');
+  }
+  window.cemAddMem=function(){
+    if(!IS_ADMIN) return;
+    const n=($('cemMemNome').value||'').trim(), c=($('cemMemCargo').value||'').trim(), err=$('cemMemErr');
+    err.textContent='';
+    if(!n){ err.textContent='Informe o nome.'; return; }
+    db.ref('cem_membros').push({nome:n.slice(0,200),cargo:c.slice(0,120),ordem:Date.now()})
+      .then(function(){ $('cemMemNome').value='';$('cemMemCargo').value=''; })
+      .catch(function(e){ err.textContent='Falha ao salvar.'; });
+  };
+  window.cemEditMem=function(id){
+    if(!IS_ADMIN) return;
+    db.ref('cem_membros/'+id).once('value').then(function(s){
+      const m=s.val()||{};
+      const n=prompt('Nome:',m.nome||''); if(n===null) return;
+      const c=prompt('Cargo:',m.cargo||''); if(c===null) return;
+      db.ref('cem_membros/'+id).update({nome:(n||'').slice(0,200),cargo:(c||'').slice(0,120)});
+    });
+  };
+  window.cemDelMem=function(id){ if(!IS_ADMIN) return; if(confirm('Excluir este membro?')) db.ref('cem_membros/'+id).remove(); };
+
+  /* ---------- EXPIRAÇÃO POR INATIVIDADE (1h) ---------- */
+  function resetIdle(){ if(idleTimer) clearTimeout(idleTimer); idleTimer=setTimeout(function(){ if(auth.currentUser) auth.signOut(); },3600000); }
+  ['click','keydown','mousemove','touchstart'].forEach(function(ev){ document.addEventListener(ev,function(){ if(auth.currentUser) resetIdle(); },{passive:true}); });
+})();
+</script>
+
 </body>
 </html>
